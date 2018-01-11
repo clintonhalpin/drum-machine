@@ -29,15 +29,47 @@ playPause.addEventListener('click', togglePlay)
  * @return {[type]} [description]
  */
 function runSequence(){
+	state.interval = setInterval(() => {
 
+		if( state.lastNodes.length > 0 ) {
+			state.lastNodes.map(node => {
+				toggleClass(node, 'beat-on')
+			})
+			state.lastNodes = []
+		}
+
+		state = Object.assign(state, {
+			currIteration: state.currIteration < (state.iterations - 1) ? state.currIteration + 1 : 0
+		})
+		
+		let nodes = document.querySelectorAll('.beat-' + state.currIteration);
+		for(var i = 0; i < nodes.length; i++) {
+			state.lastNodes.push(nodes[i])
+			toggleClass(nodes[i], 'beat-on')
+		}
+
+	}, state.timeout)
+}
+
+/**
+ * [changePlayButtonText description]
+ * @param  {[type]} playing [description]
+ * @return {[type]}         [description]
+ */
+function changePlayButtonText() {
+	playPause.innerHTML = state.playBtnText
 }
 
 /**
  * [modifyBPM description]
  * @return {[type]} [description]
  */
-function modifyBPM(){
-
+function modifyBPM(e){
+	state = Object.assign(state, {
+		timeout: Math.floor(60000 / e.target.value) // @note this math isn't write
+	})
+	togglePlay()
+	togglePlay()
 }
 
 /**
@@ -45,6 +77,24 @@ function modifyBPM(){
  * @return {[type]} [description]
  */
 function togglePlay(){
+
+	if( state.playing ) {
+		clearInterval(state.interval)
+		state = Object.assign(state, {
+			playBtnText: 'Play',
+			playing: ! state.playing
+		}, state)
+		changePlayButtonText()
+		return true
+	}
+
+	state = Object.assign(state, {
+		playBtnText: 'Stop',
+		playing: ! state.playing
+	})
+	changePlayButtonText()
+
+	runSequence()
 
 }
 
@@ -61,6 +111,27 @@ function template(str, obj) {
 		str = str.replace(regex, obj[item]);
 	})
 	return str
+}
+
+/**
+ * [toggleClass from http://youmightnotneedjquery.com/]
+ * @param  {DOM} el []
+ * @return {sideeffect}    []
+ */
+function toggleClass(el, className) {
+	if (el.classList) {
+		el.classList.toggle(className);
+	} else {
+		var classes = el.className.split(' ');
+		var existingIndex = classes.indexOf(className);
+
+		if (existingIndex >= 0)
+		  classes.splice(existingIndex, 1);
+		else
+		  classes.push(className);
+
+		el.className = classes.join(' ');
+	}
 }
 
 /**
@@ -109,7 +180,7 @@ function fetchSequence( id ) {
  * @return {[type]} [description]
  */
 function renderBeatNumbers(){
-	let str = "";
+	let str = ""
 
 	if( ! state.data ) {
 		return str
@@ -129,11 +200,39 @@ function renderBeatNumbers(){
 }
 
 /**
+ * [renderBeats description]
+ * @param  {[type]} beat [description]
+ * @return {[type]}      [description]
+ */
+function renderTrackBeats(idx, track) {
+	let beatTemplate = `
+	<div class="col-15">
+		<div class="beat {customClass}">
+		    <div class="beat-inner track-{trackIdx} beat-{beatIdx}"></div>
+		</div>
+	</div>
+	`
+	return track.steps.map((beat, jdx) => {
+		  let tD = {
+ 				trackIdx: idx, 
+ 				beatIdx: jdx, 
+ 				customClass: beat ? 'beat--active' : '' 
+		  }
+			return template(beatTemplate, tD)
+	}).join('')
+}
+
+/**
  * [renderTracks description]
  * @return {[type]} [description]
  */
 function renderTracks(){
-	return "Hi, I'm tracks thooooo"
+	if( ! state.data ) {
+		return ""
+	}
+	return state.data.pattern.seq.patternTracks.map((track, idx) => {
+		return `<div class="track flex space-evenly white">${ renderTrackBeats(idx, track) }</div>`
+	}).join('')
 }
 
 /**
@@ -141,11 +240,10 @@ function renderTracks(){
  * @return {[type]} [description]
  */
 function render() {
-	const appStr = [
+	app.innerHTML = [
 		renderBeatNumbers(),
 		renderTracks()
 	].join('')
-	app.innerHTML = appStr
 }
 
 /**
