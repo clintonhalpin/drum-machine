@@ -7,4 +7,6 @@ A frontend drum-machine
 ## process
 View Notes on Process [here](/notes)
 
+---
+
 Built by [@clintonhalpin](https://twitter.com/clintonhalpin)
