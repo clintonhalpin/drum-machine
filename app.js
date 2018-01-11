@@ -25,29 +25,50 @@ speed.addEventListener('change', modifyBPM)
 playPause.addEventListener('click', togglePlay) 
 
 /**
+ * [description]
+ * @param  {[type]} "DOMContentLoaded" [description]
+ * @param  {[type]} (                  [description]
+ * @return {[type]}                    [description]
+ */
+document.addEventListener("DOMContentLoaded", () => {
+	state.data = fetchSequence()
+	render()
+})
+
+
+/**
  * [runSequence description]
  * @return {[type]} [description]
  */
 function runSequence(){
+	/**
+	 * Create Interval Timer
+	 */
 	state.interval = setInterval(() => {
-
+		/**
+		 * Loop through the last nodes/beats and reset classnames
+		 */
 		if( state.lastNodes.length > 0 ) {
 			state.lastNodes.map(node => {
 				toggleClass(node, 'beat-on')
 			})
 			state.lastNodes = []
 		}
-
+		/**
+		 * Update currentIteration ( bar )
+		 */
 		state = Object.assign(state, {
 			currIteration: state.currIteration < (state.iterations - 1) ? state.currIteration + 1 : 0
 		})
-		
+		/**
+		 * Fetch the beats with class names that matech currentIteration
+		 * push them into lastNotes so we can clean up next time around!
+		 */
 		let nodes = document.querySelectorAll('.beat-' + state.currIteration);
 		for(var i = 0; i < nodes.length; i++) {
 			state.lastNodes.push(nodes[i])
 			toggleClass(nodes[i], 'beat-on')
 		}
-
 	}, state.timeout)
 }
 
@@ -245,14 +266,3 @@ function render() {
 		renderTracks()
 	].join('')
 }
-
-/**
- * [description]
- * @param  {[type]} "DOMContentLoaded" [description]
- * @param  {[type]} (                  [description]
- * @return {[type]}                    [description]
- */
-document.addEventListener("DOMContentLoaded", () => {
-	state.data = fetchSequence()
-	render();
-})
