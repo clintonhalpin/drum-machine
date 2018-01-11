@@ -1,0 +1,42 @@
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>JS-808</title>
+        <meta name="description" content="A Drum Machine">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="styles/normalize.css">
+        <link rel="stylesheet" href="styles/basscss.min.css">
+        <link rel="stylesheet" href="styles/style.css">
+    </head>
+    <body>
+        <div class="sequencer-controls p2 bg-dark-gray clearfix">
+            <!-- Todo Update This -->
+            <h1 class="sequencer-title h2 m0">JS-808</h1>
+            <div class="sequencer-play-state">
+                <div class="col col-6">
+                    <button id="playPause" class="btn bg-white black rounded">Play</button>
+                </div>
+                <div class="col col-6 col-right">
+                    <div class="table col-right">
+                        <div class="table-cell right-align px1">
+                            <span class="sequencer-bpm-label white caps">Bpm</span>
+                        </div>
+                        <div class="table-cell">
+                            <input id="speed" type="number" class="field-dark" value="128" />
+                        </div>
+                        <div class="table-cell px1">
+                            <select id="trackSelect" class="field-dark">
+                                <option>JS-1</option>
+                                <option>JS-2</option>
+                                <option>JS-3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="app" class="p1"></div>
+        <script src="app.js"></script>
+    </body>
+</html>
