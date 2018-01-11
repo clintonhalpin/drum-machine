@@ -4,6 +4,7 @@
 const app = document.getElementById('app')
 const playPause = document.getElementById('playPause')
 const speed = document.getElementById('speed')
+const trackSelect = document.getElementById('trackSelect')
 
 /**
  * State
@@ -23,6 +24,7 @@ let state = {
  */
 speed.addEventListener('change', modifyBPM)
 playPause.addEventListener('click', togglePlay) 
+trackSelect.addEventListener('change', changeTrack)
 
 /**
  * [description]
@@ -78,6 +80,7 @@ function runSequence(){
  * @return {[type]}         [description]
  */
 function changePlayButtonText() {
+	toggleClass(playPause, 'red')
 	playPause.innerHTML = state.playBtnText
 }
 
@@ -117,6 +120,14 @@ function togglePlay(){
 
 	runSequence()
 
+}
+
+function changeTrack(e){
+	let trackId = e.target.value.replace('JS-', '')
+	state = Object.assign(state, {
+		data: fetchSequence(trackId)
+	})
+	render()
 }
 
 /**
@@ -190,8 +201,62 @@ function fetchSequence( id ) {
 				}
 			}
 		},
-		'2': {},
-		'3': {},
+		'2': {
+			name: "JS-2",
+			sampleMap: [
+				'Kick',
+				'Snare',
+			],
+			pattern: {
+				seq: {
+					bpm: 128,
+					patternTracks: [
+						{
+							steps:[1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0]
+						},
+						{
+							steps:[0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1]
+						},
+					]
+				}
+			}
+		},
+		'3': {
+			name: "JS-2",
+			sampleMap: [
+				'Kick',
+				'Snare',
+				'Snare',
+				'Snare',
+				'Snare',
+				'Snare',
+			],
+			pattern: {
+				seq: {
+					bpm: 128,
+					patternTracks: [
+						{
+							steps:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+						},
+						{
+							steps:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+						},
+						{
+							steps:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+						},
+						{
+							steps:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+						},
+						{
+							steps:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+						},
+						{
+							steps:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+						},
+					]
+				}
+			}
+		},
 	}
 	return sequences[id] ? sequences[id] : sequences['1']
 }

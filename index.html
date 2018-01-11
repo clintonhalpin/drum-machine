@@ -11,6 +11,7 @@
     </head>
     <body>
         <div class="sequencer-controls p2 bg-dark-gray clearfix">
+            <!-- Todo Update This -->
             <h1 class="sequencer-title h2 m0">JS-808</h1>
             <div class="sequencer-play-state">
                 <div class="col col-6">
@@ -22,7 +23,14 @@
                             <span class="sequencer-bpm-label white caps">Bpm</span>
                         </div>
                         <div class="table-cell">
-                            <input id="speed" type="number" class="sequencer-bpm-input" value="128" />
+                            <input id="speed" type="number" class="field-dark" value="128" />
+                        </div>
+                        <div class="table-cell px1">
+                            <select id="trackSelect" class="field-dark">
+                                <option>JS-1</option>
+                                <option>JS-2</option>
+                                <option>JS-3</option>
+                            </select>
                         </div>
                     </div>
                 </div>

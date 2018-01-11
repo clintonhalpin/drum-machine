@@ -57,7 +57,7 @@ p {
 	position: relative;
 }
 
-.sequencer-bpm-input {
+.field-dark {
 	width: 90px;
 	position: relative;
 	z-index: 200;
